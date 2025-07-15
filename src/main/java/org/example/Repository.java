@@ -24,5 +24,9 @@ public class Repository {
     public static void  updatetask (int numbertask,Service service){
         datemap.replace(numbertask, service);
     }
+    public static void  deletetsk(int numbertask)
+    {
+        datemap.remove(numbertask);
+    }
 
 }

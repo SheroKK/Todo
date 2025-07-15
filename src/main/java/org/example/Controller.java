@@ -12,9 +12,12 @@ public class Controller {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        while (true) {
+        boolean statusprogramm = true;
+        while (statusprogramm) {
             int choice;
             int update;
+            int updatestatus;
+            int sort;
             System.out.println("take command:");
             System.out.println("1. add");
             System.out.println("2. show tasks");
@@ -63,13 +66,98 @@ public class Controller {
                             Repository.updatetask(numbertask,service);
                             break;
                         case 2:
+                            service = Repository.datemap.get(numbertask);
+                            System.out.println("Enter task description: ");
+                            service.setDescription(sc.nextLine());
+                            Repository.updatetask(numbertask, service);
                             break;
                         case 3:
+                            service = Repository.datemap.get(numbertask);
+                            System.out.println("Enter task description: ");
+                            String localdateupdatestr = sc.nextLine();
+                            DateTimeFormatter formatter1 =DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                            try {
+                                LocalDate localDate = LocalDate.parse(localdateupdatestr,formatter1);
+                                service.setDeadline(localDate);
+                                Repository.updatetask(numbertask,service);
+                            }catch (DateTimeParseException e){
+                                System.out.println("Invalid data format");
+                            }
                             break;
                         case 4:
+                            System.out.println("Take status");
+                            System.out.println("1. TODO");
+                            System.out.println("2. IN_PROGRESS");
+                            System.out.println("3. DONE");
+                            updatestatus = sc.nextInt();
+                            sc.nextLine();
+                            switch (updatestatus){
+                                case 1:
+                                    service = Repository.datemap.get(numbertask);
+                                    service.setStatus("TODO");
+                                    Repository.updatetask(numbertask, service);
+                                    break;
+                                case 2:
+                                    service = Repository.datemap.get(numbertask);
+                                    service.setStatus("IN_PROGRESS");
+                                    Repository.updatetask(numbertask, service);
+                                    break;
+                                case 3:
+                                    service = Repository.datemap.get(numbertask);
+                                    service.setStatus("DONE");
+                                    Repository.updatetask(numbertask, service);
+                                    break;
+                                default:
+
+                            }
                             break;
                         default:
                     }
+                    break;
+                case 4:
+                    System.out.println("Enter task number: ");
+                    numbertask = sc.nextInt();
+                    Repository.deletetsk(numbertask);
+                    break;
+                case 5:
+                    System.out.println("Select a status ");
+                    System.out.println("1. TODO");
+                    System.out.println("2. IN_PROGRESS");
+                    System.out.println("3. DONE");
+                    updatestatus = sc.nextInt();
+                    sc.nextLine();
+                    switch (updatestatus){
+                        case 1:
+                            Service.filter("TODO");
+                            break;
+                        case 2:
+                            Service.filter("IN_PROGRESS");
+                            break;
+                        case 3:
+                            Service.filter("DONE");
+                            break;
+                        default:
+                    }
+                    break;
+                case 6:
+                    System.out.println("Select a sort");
+                    System.out.println("1. Sort by deadline");
+                    System.out.println("2. Sort by status");
+                    sort = sc.nextInt();
+                    sc.nextLine();
+                    switch (sort)
+                    {
+                        case 1:
+                            Service.sortbydeadline();
+                            break;
+                        case 2:
+                            Service.sortbystatus();
+                            break;
+                        default:
+                    }
+                    break;
+                case 7:
+                    statusprogramm = false;
                     break;
                 default:
                     System.out.println("Warning!");
